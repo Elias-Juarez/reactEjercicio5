@@ -1,21 +1,27 @@
 import { Button, Form } from "react-bootstrap";
 import ListaTareas from "./ListaTareas";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 const FormularioTarea = () => {
   const [tarea, setTarea] = useState("");
-  const [tareas, setTareas] = useState([]);
+  const tareasLocalStorage =
+    JSON.parse(localStorage.getItem("tareasKey")) || [];
+  const [tareas, setTareas] = useState(tareasLocalStorage);
+
+  useEffect(() => {
+    console.log("ejecutando useEffect");
+    localStorage.setItem("tareasKey", JSON.stringify(tareas));
+  }, [tareas]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("dentro de funcion");
     setTareas([...tareas, tarea]);
     setTarea("");
   };
 
   const borrarTarea = (nombreTarea) => {
     const tareasFiltradas = tareas.filter((tarea) => tarea != nombreTarea);
-    setTareas(tareasFiltradas)
+    setTareas(tareasFiltradas);
   };
 
   return (
